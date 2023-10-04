@@ -1,7 +1,7 @@
 ---
 title: "Expanding Partition on Linux"
 date: 2023-02-02
-draft: true
+draft: false
 
 tags:
 - expanding
@@ -53,6 +53,69 @@ Expanding a partition on Linux (Virtualization) typically involves a few steps. 
         sudo pvs
     ```
 5. **Resize the Physical Volume**
+    
+    ```bash
+        sudo pvresize /dev/sdXY
+
+        sudo pvdisplay /dev/sdXY
+    ```
+    this first command used for resize the physical volume and the second one used for show PV data size
+    
+    Replace ***/dev/sdXY*** with the appropriate device name for your disk (for example, ***/dev/sda3***).
+
 6. **Check Logical Volume Status (LVS)**
+
+    ```bash
+        sudo lvs
+    ```
 7. **Expand the Logical Volume**
+    ```bash
+        sudo  lvresize -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+    ```
+
+    Replace ***/dev/mapper/ubuntu--vg-ubuntu--lv*** with your LVM name.
+
 8. **Resize the the volume**
+    ```bash
+        sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+    ```
+
+    Replace ***/dev/mapper/ubuntu--vg-ubuntu--lv*** with your LVM name.
+
+## For Dedicated Mounted Drive
+1. **Rescan Disk without restart machine**
+    
+    ```bash
+    sudo echo 1>/sys/class/block/sda/device/rescan
+    ```
+
+2. **Check Disk space after expanding partition on same disk**
+
+    ```bash
+    sudo fdisk -l #used for list all disk
+    ```
+    if there are red text on the list, just type `w` for rewrite block, there are no affected to file inside partition.
+3. **Use parted to Resize Partitions**
+    
+    - **Check Partition Layout** 
+        
+        ```bash
+        sudo parted /dev/sdX print
+        ```
+        
+        Replace ***/dev/sdX*** with the appropriate device name for your disk (for example, ***/dev/sda***).
+
+ 
+    
+    - **Resize the Partition**
+    
+         ```bash
+        sudo parted resizepart X 100% 
+        ```
+        this command resizes partition **X** (we can just change **X** with partition number ex: 1 or 2 etc) to use 100% of the available space.
+4. **Resize the the volume**
+    ```bash
+        sudo resize2fs /dev/sdXY
+    ```
+
+    Replace ***/dev/sdXY*** with your LVM name.
