@@ -1,5 +1,5 @@
 ---
-title: "Expanding Partition on Linux"
+title: "Expanding Partition on Linux [en]"
 date: 2023-02-02
 draft: false
 

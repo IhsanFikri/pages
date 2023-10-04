@@ -1,5 +1,5 @@
 ---
-title: "Bash Cheat sheet"
+title: "Bash Cheat sheet [id]"
 date: 2023-01-04
 draft: false
 
