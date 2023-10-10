@@ -8,7 +8,9 @@ tags:
 - expanding
 ---
 ![linux2](https://cdn.dribbble.com/users/2965683/screenshots/7161445/media/0800209a26fcb568edd57dce98b43c71.jpg)
-On a Linux system, swap space is used as a virtual memory extension when the system's physical RAM (Random Access Memory) is fully utilized. When your computer runs out of physical memory because of the applications and processes you're running, the operating system moves data from the RAM to an area of the hard drive or SSD called swap space
+
+
+&nbsp;&nbsp;&nbsp;On a Linux system, swap space is used as a virtual memory extension when the system's physical RAM (Random Access Memory) is fully utilized. When your computer runs out of physical memory because of the applications and processes you're running, the operating system moves data from the RAM to an area of the hard drive or SSD called swap space
 
 1.  **Check the Current Swap Space**
 
