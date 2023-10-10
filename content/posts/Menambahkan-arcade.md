@@ -10,7 +10,6 @@ tags:
 
 
 <!-- ![Laravel](/assets/laravel.jpg) -->
-<!-- ![HUGO](https://d33wubrfki0l68.cloudfront.net/c38c7334cc3f23585738e40334284fddcaf03d5e/2e17c/images/hugo-logo-wide.svg) -->
 {{<image src=https://d33wubrfki0l68.cloudfront.net/c38c7334cc3f23585738e40334284fddcaf03d5e/2e17c/images/hugo-logo-wide.svg posistion="center">}}
 
 ---
@@ -45,7 +44,8 @@ Setelah kita membuat video demo menggunakan *Arcade* akan di berikan beberapa pi
 -  Gif
 - Video
 
-{{<image src="https://file.notion.so/f/f/7dabe79a-a9fc-4654-bc33-f7dbe143273a/80d36574-8f02-4649-b361-870553c76e00/Untitled.png?id=464808b2-8c29-4263-b80e-2580f92d7c6d&table=block&spaceId=7dabe79a-a9fc-4654-bc33-f7dbe143273a&expirationTimestamp=1696651200000&signature=MPql7JnJVBfOOVaRsjq-_ZNjcreKF4IeB524W5Oqnuo&downloadName=Untitled.png" position="center" style= "width: 400px; height: 600px" >}}
+<!-- ![arcade](/assets/exportarcade.png) -->
+{{<image src="/assets/exportarcade.png" position="center" style= "width: 400px; height: 600px" >}}
 
 lalu pilih ***copy code*** pada bagian website, didapatkan code berikut
 ```html
@@ -64,6 +64,7 @@ lalu pilih ***copy code*** pada bagian website, didapatkan code berikut
 
 code tersebut kita simpan pada *lokasi shortcodes* yang sebelumnya kita bahas, lalu kita lakukan perubahan pada bagian `src`
 ```html
+    <!-- dari -->
     <iframe
         src="https://demo.arcade.software/<YOUR_VIDEO_ID>?embed"
         frameborder="0" 
@@ -80,17 +81,20 @@ code tersebut kita simpan pada *lokasi shortcodes* yang sebelumnya kita bahas, l
 ```
 
 
-### Panduan UI
+### Contoh Embed video Arcade
+- ` {{ < arcade "https://demo.arcade.software/0y1ULvJXzVZCF3QtTr0y?embed" >}} `
+
+
 {{< arcade "https://demo.arcade.software/0y1ULvJXzVZCF3QtTr0y?embed" >}}
 
-## For LVM
+<!-- ## For LVM
 1. **Rescan Disk without restart machine**
     
     ```bash
     sudo echo 1>/sys/class/block/sda/device/rescan
-    ```
-
+    ``` -->
 ## Referensi
 - https://gohugo.io/templates/shortcode-templates/
+
 [//]: 
     [Arcade1]: (https://www.arcade.software/)
