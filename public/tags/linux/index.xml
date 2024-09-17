@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on Ihsan F. A. Muharram</title>
+    <link>https://ihsan.thedev.id/tags/linux/</link>
+    <description>Recent content in linux on Ihsan F. A. Muharram</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 13 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ihsan.thedev.id/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to log all bash commands by all user on Linux [id]</title>
+      <link>https://ihsan.thedev.id/posts/2024/09/how-to-log-all-bash-commands-by-all-user-on-linux-id/</link>
+      <pubDate>Fri, 13 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/posts/2024/09/how-to-log-all-bash-commands-by-all-user-on-linux-id/</guid>
+      <description>Melakukan Logging command pada user linux merupakan salah satu fitur yang diperlukan oleh system administrator, maka dari itu, berikut salah satu cara untuk melakukan pencatatan semua command yang di jalan kan oleh user/
+    Untuk BASH shell, edit pada system-wide runtime BASH config
+sudo vim /etc/bash.bashrc   Tambahkan perintah ini dibaigan paling bawah
+export PROMPT_COMMAND=&amp;#39;RETRN_VAL=$?;logger -p local6.debug &amp;#34;$(whoami) [$$]: $(history 1 | sed &amp;#34;s/^[ ]*[0-9]\+[ ]*//&amp;#34; )&amp;#34;&amp;#39;   Edit file /etc/rsyslog.</description>
+    </item>
+    
+  </channel>
+</rss>
