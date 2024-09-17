@@ -193,7 +193,7 @@ defaultContentLanguageInSubdir = true
   
  [[menu.main]]
    identifier = "notes"
-   name       = "notes"
+   name       = "Note"
    url        = "notes/"
 #  [[menu.main]]
 #   identifier = "archieve"
