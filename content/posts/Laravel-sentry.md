@@ -1,7 +1,7 @@
 ---
 title: "Menambahakan Project Laravel pada Sentry [id]"
 date: 2023-02-02
-draft: false
+draft: true
 
 tags:
 - sentry
