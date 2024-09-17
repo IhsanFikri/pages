@@ -1,6 +1,6 @@
 ---
 title: "How to log all bash commands by all user on Linux [id]"
-date: 2024-09-13
+date: 2024-09-15
 draft: false
 
 tags:
