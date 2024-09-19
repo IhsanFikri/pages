@@ -9,6 +9,8 @@ tags:
 ---
 
 <!-- ![SENTRY](/assets/logging.png) -->
+{{<image src="/assets/logging.png" position="center" style= "width: 400px; height: 400px" >}}
+
 
 Melakukan Logging command pada user linux merupakan salah satu fitur yang diperlukan oleh system administrator, maka dari itu, berikut salah satu cara untuk melakukan pencatatan semua command yang di jalan kan oleh user/
 
