@@ -1,5 +1,5 @@
 ---
-title: "Restore LVM from Attached disk [id]"
+title: "Restore LVM from Attached disk [en]"
 date: 2024-09-19
 draft: false
 
