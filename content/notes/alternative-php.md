@@ -1,9 +1,10 @@
 ---
 title: alternative-php
 date: 2024-10-02
-draft: true
+draft: false
 tags: 
-,
+ - bash
+ - linux
 ---
 ```
 sudo update-alternatives --config php

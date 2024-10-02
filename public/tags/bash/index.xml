@@ -6,7 +6,77 @@
     <description>Recent content in bash on Ihsan F. A. Muharram</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 15 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ihsan.thedev.id/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ihsan.thedev.id/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>alternative-php</title>
+      <link>https://ihsan.thedev.id/notes/alternative-php/</link>
+      <pubDate>Wed, 02 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/notes/alternative-php/</guid>
+      <description>sudo update-alternatives --config php sudo update-alternatives --config phar sudo update-alternatives --config phar.phar </description>
+    </item>
+    
+    <item>
+      <title>watch storage every 3s</title>
+      <link>https://ihsan.thedev.id/notes/watchstorageevery3s/</link>
+      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/notes/watchstorageevery3s/</guid>
+      <description> watch -d -n 3 &#39;df -h&#39; </description>
+    </item>
+    
+    <item>
+      <title>Restart ISCSI Proxmox [id]</title>
+      <link>https://ihsan.thedev.id/notes/restart-iscsi-proxmox/</link>
+      <pubDate>Sat, 21 Sep 2024 10:14:54 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/notes/restart-iscsi-proxmox/</guid>
+      <description>restart iscsi proxmox
+ systemctl restart iscsid.service </description>
+    </item>
+    
+    <item>
+      <title>scan</title>
+      <link>https://ihsan.thedev.id/notes/scan-all-new-disk/</link>
+      <pubDate>Sat, 21 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/notes/scan-all-new-disk/</guid>
+      <description>scan all new disk
+for host in /sys/class/scsi_host/*; do echo &amp;#34;- - -&amp;#34; | sudo tee $host/scan; ls /dev/sd* ; done </description>
+    </item>
+    
+    <item>
+      <title>List all Crontab User [id]</title>
+      <link>https://ihsan.thedev.id/notes/list-all-crontab/</link>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/notes/list-all-crontab/</guid>
+      <description>for user in $(cut -f1 -d: /etc/passwd); do crontab -u $user -l; done </description>
+    </item>
+    
+    <item>
+      <title>Multipath iscsi proxmox [id]</title>
+      <link>https://ihsan.thedev.id/posts/2024/09/multipath-iscsi-proxmox-id/</link>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/posts/2024/09/multipath-iscsi-proxmox-id/</guid>
+      <description>Konfigurasi ISCSI Nimble / Alletra (HPE) dan Promxox dengan Multipath 1. Cek IQN pada isci proxmox
+cat /etc/iscsi/initiatorname.iscsi akan tampil output seperti ini
+## DO NOT EDIT OR REMOVE THIS FILE! ## If you remove this file, the iSCSI daemon will not start. ## If you change the InitiatorName, existing access control lists ## may reject this initiator. The InitiatorName must be unique ## for each iSCSI initiator. Do NOT duplicate iSCSI InitiatorNames.</description>
+    </item>
+    
+    <item>
+      <title>Restore LVM from Attached disk [en]</title>
+      <link>https://ihsan.thedev.id/posts/2024/09/restore-lvm-from-attached-disk-en/</link>
+      <pubDate>Thu, 19 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/posts/2024/09/restore-lvm-from-attached-disk-en/</guid>
+      <description>1. Scan all new disk
+for host in /sys/class/scsi_host/*; do echo &amp;quot;- - -&amp;quot; | sudo tee $host/scan; ls /dev/sd* ; done 2. Check attached disk
+ fdisk -l 3. heck phisical disk on lvm pvs
+   PV VG Fmt Attr PSize PFre     /dev/sda3 ubuntu-vg lvm2 a&amp;ndash; &amp;lt;48.00g 0   /dev/sdb3 ubuntu-vg lvm2 a&amp;ndash; &amp;lt;99.00g 0    4. if vgname is same do this instead</description>
+    </item>
+    
     <item>
       <title>How to log all bash commands by all user on Linux [id]</title>
       <link>https://ihsan.thedev.id/posts/2024/09/how-to-log-all-bash-commands-by-all-user-on-linux-id/</link>

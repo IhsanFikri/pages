@@ -5,8 +5,281 @@
         <description>Recent content in Posts on Ihsan F. A. Muharram</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-US</language>
-        <lastBuildDate>Sun, 15 Sep 2024 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 20 Sep 2024 00:00:00 +0000</lastBuildDate>
         <atom:link href="https://ihsan.thedev.id/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Multipath iscsi proxmox [id]</title>
+            <link>https://ihsan.thedev.id/posts/2024/09/multipath-iscsi-proxmox-id/</link>
+            <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+            
+            <guid>https://ihsan.thedev.id/posts/2024/09/multipath-iscsi-proxmox-id/</guid>
+            <description>Konfigurasi ISCSI Nimble / Alletra (HPE) dan Promxox dengan Multipath 1. Cek IQN pada isci proxmox
+cat /etc/iscsi/initiatorname.iscsi akan tampil output seperti ini
+## DO NOT EDIT OR REMOVE THIS FILE! ## If you remove this file, the iSCSI daemon will not start. ## If you change the InitiatorName, existing access control lists ## may reject this initiator. The InitiatorName must be unique ## for each iSCSI initiator. Do NOT duplicate iSCSI InitiatorNames.</description>
+            <content type="html"><![CDATA[<h2 id="konfigurasi-iscsi-nimble--alletra-hpe-dan-promxox-dengan-multipath">Konfigurasi ISCSI Nimble / Alletra (HPE) dan Promxox dengan Multipath</h2>
+<p><strong>1. Cek IQN pada isci proxmox</strong></p>
+<pre tabindex="0"><code>cat /etc/iscsi/initiatorname.iscsi
+
+</code></pre><p>akan tampil output seperti ini</p>
+<pre tabindex="0"><code>## DO NOT EDIT OR REMOVE THIS FILE!
+## If you remove this file, the iSCSI daemon will not start.
+## If you change the InitiatorName, existing access control lists
+## may reject this initiator.  The InitiatorName must be unique
+## for each iSCSI initiator.  Do NOT duplicate iSCSI InitiatorNames.
+InitiatorName=iqn.&lt;REDACTED&gt;-08.org.debian:01:&lt;REDACTED&gt;
+</code></pre><p>lalu tambahkan data akses pada storage server yang akan digunakan</p>
+<blockquote>
+<p>disini saya mengguakan nimble/ alletra storage</p>
+</blockquote>
+<blockquote>
+<p>Penting untuk memulai semua koneksi ISCSI saat boot time, dengan cara setting pada <code>node.startup</code> menjadi <code>automatic</code> dan
+default <code>node.session.timeo.replacement_timout</code> dari <code>120</code> menjadi <code>15</code> second</p>
+</blockquote>
+<p><strong>2. konfigurasi data tersebut pada file <code>etc/iscsi/iscsid.conf</code></strong></p>
+<pre tabindex="0"><code>node.startup = automatic
+node.session.timeo.replacement_timeout = 15
+
+</code></pre><p>restart iscsi service pada proxmox</p>
+<pre tabindex="0"><code> systemctl restart iscsid.service
+
+</code></pre><p><strong>3. jika sudah ditambahakan di server storage, saat nya di tambahkan pada server proxmox</strong></p>
+<p>Pada <strong>datacenter</strong> -&gt; pilih <strong>storage</strong> -&gt; pilih <strong>Add</strong> -&gt; pilih <strong>ISCSI</strong></p>
+
+    <img src="/assets/storage1.png"  class="center"  />
+
+
+<p>Dalam Pop-up Add: iSCSI masukan :</p>
+<ul>
+<li><strong>ID</strong> : Nama datastore iSCSI</li>
+<li><strong>Portal</strong> : IP discovery iSCSI</li>
+<li><strong>Target</strong> : LUN Target iSCSI</li>
+<li><strong>Unmark pada Use LUNs Directly</strong></li>
+<li>lalu <strong>Add</strong>
+
+    <img src="/assets/storage2.png"  class="center"  />
+
+</li>
+</ul>
+
+    <img src="/assets/storage3.png"  class="center"  />
+
+
+<p><strong>4. lalu check iscsi session dengan perintah :</strong></p>
+<pre tabindex="0"><code>iscsiadm -m session
+
+</code></pre><p>maka akan tampil output seperti ini:</p>
+<pre tabindex="0"><code>tcp: [1] &lt;REDACTED&gt;.17:&lt;REDACTED&gt;,&lt;REDACTED&gt; iqn.2007-11.com.nimblestorage:&lt;REDACTED&gt; (non-flash)
+tcp: [2] &lt;REDACTED&gt;.16:&lt;REDACTED&gt;,&lt;REDACTED&gt; iqn.2007-11.com.nimblestorage:&lt;REDACTED&gt; (non-flash)
+tcp: [3] &lt;REDACTED&gt;.18:&lt;REDACTED&gt;,&lt;REDACTED&gt; iqn.2007-11.com.nimblestorage:&lt;REDACTED&gt; (non-flash)
+tcp: [4] &lt;REDACTED&gt;.15:&lt;REDACTED&gt;,&lt;REDACTED&gt; iqn.2007-11.com.nimblestorage:&lt;REDACTED&gt; (non-flash)
+</code></pre><p>jika tampil session lebih dari satu, maka sebelum melakukan pembuatan LVM pada disk, perlu dilakukan konfigurasi multipath pada Proxmox</p>
+<h1 id="active-multipath">Active Multipath</h1>
+<p><strong>1. Install multipath tools</strong></p>
+<pre tabindex="0"><code>apt-get update
+apt-get install multipath-tools
+
+</code></pre><blockquote>
+<p>Rekomendasi dari Proxmox, agar kita menggunakan wwid (World Wide Identification) untuk mengidentifikasi disk, berikut perintah untuk mengetahui wwid pada disk</p>
+</blockquote>
+<p><strong>2. Cek disk yang terkoneksi dengan iscsi dengan perintah</strong></p>
+<pre tabindex="0"><code>lsblk
+
+</code></pre><p>akan tampil seperti berikut :</p>
+<pre tabindex="0"><code>NAME               MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda                  8:0    0 278.5G  0 disk
+├─sda1               8:1    0  1007K  0 part
+├─sda2               8:2    0     1G  0 part /boot/efi
+└─sda3               8:3    0 277.5G  0 part
+  ├─pve-swap       252:0    0    30G  0 lvm  [SWAP]
+  ├─pve-root       252:1    0    50G  0 lvm  /
+  ├─pve-data_tmeta 252:2    0   1.5G  0 lvm
+  │ └─pve-data     252:4    0 144.5G  0 lvm
+  └─pve-data_tdata 252:3    0 144.5G  0 lvm
+    └─pve-data     252:4    0 144.5G  0 lvm
+sdb                  8:16   0    10G  0 disk
+sdc                  8:32   0    10G  0 disk
+sdd                  8:48   0    10G  0 disk
+sde                  8:64   0    10G  0 disk
+sr0                 11:0    1  1024M  0 rom
+
+</code></pre><p>terdapat 4 disk yang dengan volume yang sama, yang mana disk tersebut merupakan hasil data dari iscsi,
+cara melakukan pengecekan apakah disk tersebut sama semua atau tidak, kita bisa melakukan pengecekan dengan wwid</p>
+<pre tabindex="0"><code>/lib/udev/scsi_id -g -u -d /dev/sdb
+
+</code></pre><p>akan tampil wwid dari disk :</p>
+<pre tabindex="0"><code>2092&lt;REDACTED&gt;6585 #wwid disk iscsi saya
+
+</code></pre><p><strong>3.  Kita tambahkan konfigurasi multipath pada server proxmox:</strong></p>
+<pre tabindex="0"><code>vim /etc/multipath.conf
+
+</code></pre><p>tambahkan code sebagai berikut:</p>
+<pre tabindex="0"><code>defaults {
+        polling_interval        2
+        path_selector           &quot;round-robin 0&quot;
+        path_grouping_policy    multibus
+        uid_attribute           ID_SERIAL
+        rr_min_io               100
+        failback                immediate
+        no_path_retry           queue
+        user_friendly_names     yes
+}
+
+blacklist {
+        wwid .*
+}
+
+blacklist_exceptions {
+        wwid &quot;2092&lt;REDACTED&gt;6585&quot;
+}
+</code></pre><p><strong>4. WWID juga perlu di tambahkan di file <code>/etc/multipath/wwids</code> untuk menambahkan wwid pada file tersebut hanya perlu menjalankan perintah berikut:</strong></p>
+<pre tabindex="0"><code>multipath -a 2092&lt;REDACTED&gt;6585
+
+</code></pre><p><strong>5. Untuk mempermudah identifikasi path, kita bisa menggunakan alias yang di konfigurasi di <code>/etc/multipath/bindings</code> tambahkan script berikut pada file tsb</strong></p>
+<pre tabindex="0"><code>mpatha 2092&lt;REDACTED&gt;6585
+
+</code></pre><p><strong>6. Restart multipath tools untuk apply configurasi</strong></p>
+<pre tabindex="0"><code>systemctl restart multipath-tools.service
+
+</code></pre><p>cek konfigurasi apakah sudah sesuai atau belum dengan perintah</p>
+<pre tabindex="0"><code>multipath -ll
+
+</code></pre><p>outputnya akan tampil seperti berikut:</p>
+<pre tabindex="0"><code>mpatha (2092&lt;REDACTED&gt;6585) dm-5 Nimble,Server
+size=10G features='1 queue_if_no_path' hwhandler='1 alua' wp=rw
+`-+- policy='round-robin 0' prio=50 status=active
+  |- 11:0:0:170 sdb 8:16 active ready running
+  |- 12:0:0:170 sdc 8:32 active ready running
+  |- 13:0:0:170 sdd 8:48 active ready running
+  `- 14:0:0:170 sde 8:64 active ready running
+
+</code></pre><p>atau jika ingin lebih detil bisa menggunakan</p>
+<pre tabindex="0"><code>multipath -v3
+
+</code></pre><h1 id="create-lvm-storage-over-iscsi">Create LVM storage over iSCSI</h1>
+<p><strong>1. Add new LVM</strong>
+Pilih <strong>datacenter</strong> -&gt; pilih <strong>storage</strong> -&gt; pilih <strong>Add</strong> -&gt; pilih <strong>LVM</strong></p>
+
+    <img src="/assets/lvm.png"  class="center"  />
+
+
+<p>akan muncul menu <strong>Add: LVM</strong></p>
+<ul>
+<li><strong>ID</strong> : Nama / ID untuk LVM baru</li>
+<li><strong>Base storage</strong> : pilih storage iSCSI yang baru</li>
+<li><strong>Base volume</strong> : pilih LUN yang di set sebelumnya pada server Storage iSCSI</li>
+<li><strong>Volume Group</strong> : Beri nama baru untuk volume group iSCSI</li>
+</ul>
+
+    <img src="/assets/addlvm.png"  class="center"  />
+
+
+<p>Hasil Konfigurasi LVM over iSCSI</p>
+
+    <img src="/assets/doneadd.png"  class="center"  />
+
+
+
+    <img src="/assets/show.png"  class="center"  />
+
+
+<h2 id="troubleshoot">Troubleshoot</h2>
+<h4 id="jika-multipath--ll-tidak-menampilkan-output">Jika <code>multipath -ll</code> tidak menampilkan output</h4>
+<p>coba lakukan restart pada service ISCSI dan Multipath</p>
+<pre tabindex="0"><code> systemctl restart iscsid.service
+
+</code></pre><pre tabindex="0"><code>systemctl restart multipath-tools
+
+</code></pre>]]></content>
+        </item>
+        
+        <item>
+            <title>Restore LVM from Attached disk [en]</title>
+            <link>https://ihsan.thedev.id/posts/2024/09/restore-lvm-from-attached-disk-en/</link>
+            <pubDate>Thu, 19 Sep 2024 00:00:00 +0000</pubDate>
+            
+            <guid>https://ihsan.thedev.id/posts/2024/09/restore-lvm-from-attached-disk-en/</guid>
+            <description>1. Scan all new disk
+for host in /sys/class/scsi_host/*; do echo &amp;quot;- - -&amp;quot; | sudo tee $host/scan; ls /dev/sd* ; done 2. Check attached disk
+ fdisk -l 3. heck phisical disk on lvm pvs
+   PV VG Fmt Attr PSize PFre     /dev/sda3 ubuntu-vg lvm2 a&amp;ndash; &amp;lt;48.00g 0   /dev/sdb3 ubuntu-vg lvm2 a&amp;ndash; &amp;lt;99.00g 0    4. if vgname is same do this instead</description>
+            <content type="html"><![CDATA[<hr>
+<p><strong>1. Scan all new disk</strong></p>
+<pre tabindex="0"><code>for host in /sys/class/scsi_host/*; do echo &quot;- - -&quot; | sudo tee $host/scan; ls /dev/sd* ; done
+</code></pre><p><strong>2. Check attached disk</strong></p>
+<pre tabindex="0"><code>    fdisk -l
+</code></pre><p><strong>3. heck phisical disk on lvm <code>pvs</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>PV</th>
+<th>VG</th>
+<th>Fmt</th>
+<th>Attr</th>
+<th>PSize</th>
+<th>PFre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/dev/sda3</td>
+<td>ubuntu-vg</td>
+<td>lvm2</td>
+<td>a&ndash;</td>
+<td>&lt;48.00g</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/dev/sdb3</td>
+<td>ubuntu-vg</td>
+<td>lvm2</td>
+<td>a&ndash;</td>
+<td>&lt;99.00g</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>4. if vgname is same do this instead</strong></p>
+<pre tabindex="0"><code>vgimportclone -n ubuntu-vg_clone /dev/sdb3
+</code></pre><p><strong>5. active the vg</strong></p>
+<pre tabindex="0"><code>vgchange -ay
+</code></pre><p>then check again using <code>pvs</code> the vg name will be change like we set before</p>
+<table>
+<thead>
+<tr>
+<th>PV</th>
+<th>VG</th>
+<th>Fmt</th>
+<th>Attr</th>
+<th>PSize</th>
+<th>PFre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/dev/sda3</td>
+<td>ubuntu-vg</td>
+<td>lvm2</td>
+<td>a&ndash;</td>
+<td>&lt;48.00g</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/dev/sdb3</td>
+<td>ubuntu-vg_clone</td>
+<td>lvm2</td>
+<td>a&ndash;</td>
+<td>&lt;99.00g</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. and then we can mount the data from LVM</strong></p>
+<pre tabindex="0"><code>mount /dev/ubuntu-vg_clone/ubuntu-lv /mnt
+</code></pre><p><strong>7. Do as you wish</strong></p>
+<p>new LVM is mounted at <code>/mnt</code></p>
+]]></content>
+        </item>
         
         <item>
             <title>How to log all bash commands by all user on Linux [id]</title>
@@ -19,6 +292,10 @@
 sudo vim /etc/bash.bashrc   Tambahkan perintah ini dibaigan paling bawah
 export PROMPT_COMMAND=&amp;#39;RETRN_VAL=$?;logger -p local6.debug &amp;#34;$(whoami) [$$]: $(history 1 | sed &amp;#34;s/^[ ]*[0-9]\+[ ]*//&amp;#34; )&amp;#34;&amp;#39;   Edit file /etc/rsyslog.</description>
             <content type="html"><![CDATA[<!-- raw HTML omitted -->
+
+    <img src="/assets/logging.png"  class="center"  style="width: 400px; height: 400px"  />
+
+
 <p>Melakukan Logging command pada user linux merupakan salah satu fitur yang diperlukan oleh system administrator, maka dari itu, berikut salah satu cara untuk melakukan pencatatan semua command yang di jalan kan oleh user/</p>
 <hr>
 <h2 id="heading"></h2>

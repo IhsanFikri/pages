@@ -1,7 +1,7 @@
 ---
 title: watch storage every 3s
 date: 2024-10-01
-draft: true
+draft: false
 tags: 
 - bash
 ---

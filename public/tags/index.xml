@@ -6,11 +6,11 @@
     <description>Recent content in Tags on Ihsan F. A. Muharram</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 15 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ihsan.thedev.id/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ihsan.thedev.id/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>bash</title>
       <link>https://ihsan.thedev.id/tags/bash/</link>
-      <pubDate>Sun, 15 Sep 2024 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 02 Oct 2024 00:00:00 +0000</pubDate>
       
       <guid>https://ihsan.thedev.id/tags/bash/</guid>
       <description></description>
@@ -19,9 +19,36 @@
     <item>
       <title>linux</title>
       <link>https://ihsan.thedev.id/tags/linux/</link>
-      <pubDate>Sun, 15 Sep 2024 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 02 Oct 2024 00:00:00 +0000</pubDate>
       
       <guid>https://ihsan.thedev.id/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://ihsan.thedev.id/tags/python/</link>
+      <pubDate>Wed, 02 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>proxmox</title>
+      <link>https://ihsan.thedev.id/tags/proxmox/</link>
+      <pubDate>Sat, 21 Sep 2024 10:14:54 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/tags/proxmox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data</title>
+      <link>https://ihsan.thedev.id/tags/data/</link>
+      <pubDate>Sun, 15 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ihsan.thedev.id/tags/data/</guid>
       <description></description>
     </item>
     
