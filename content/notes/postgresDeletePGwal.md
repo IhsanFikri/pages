@@ -1,7 +1,7 @@
 ---
 title: postgres Delete PGwal 
 date: 2024-10-01
-draft: true
+draft: false
 tags: 
 - postgresql,
 ---
